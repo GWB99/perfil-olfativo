@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Perfil Olfativo</title>
+<meta name="description" content="Responda 10 perguntas, descubra seu perfil olfativo e receba perfumes recomendados para o seu dia.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='12' y='2' width='8' height='6' rx='1' fill='%2314212A'/%3E%3Crect x='5' y='9' width='22' height='21' rx='5' fill='%230E6B70'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ========== ENTRADA (cadastro / login) ========== -->
+<main id="v-landing" hidden>
+  <div class="landing">
+    <section>
+      <div class="eyebrow">Perfil Olfativo · teste fechado</div>
+      <h1>Descubra o perfume que tem a sua cara.</h1>
+      <p class="lede">Responda 10 perguntas rápidas. A gente traça o seu perfil olfativo e recomenda perfumes para cada dia, levando em conta a ocasião e a previsão do tempo da sua cidade.</p>
+      <div class="steps">
+        <div><b>1</b><span><strong>Cadastre-se</strong><br>Nome, e-mail e senha.</span></div>
+        <div><b>2</b><span><strong>Responda o quiz</strong><br>10 perguntas, cerca de 2 minutos.</span></div>
+        <div><b>3</b><span><strong>Receba as recomendações</strong><br>E compre direto pelo site.</span></div>
+      </div>
+      <div class="bottles" id="l-bottles" aria-hidden="true"></div>
+    </section>
+    <section class="authcard">
+      <div class="authtabs" role="tablist">
+        <button type="button" role="tab" id="a-tab-up" aria-selected="true">Criar conta</button>
+        <button type="button" role="tab" id="a-tab-in" aria-selected="false">Entrar</button>
+      </div>
+      <form id="f-up" autocomplete="on">
+        <label class="f">Nome<input name="name" required autocomplete="name" placeholder="Como você quer ser chamado"></label>
+        <label class="f">E-mail<input name="email" type="email" required autocomplete="email" placeholder="voce@email.com"></label>
+        <label class="f">Senha<input name="password" type="password" required minlength="6" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></label>
+        <label class="f">Cidade<input name="city" autocomplete="address-level2" placeholder="São Paulo"></label>
+        <label class="f" id="invite-wrap">Código de convite<input name="invite" autocomplete="off" placeholder="Recebido por quem te convidou"></label>
+        <button class="btn" type="submit">Criar conta e começar</button>
+        <p class="hint">A cidade é usada só para a previsão do tempo nas recomendações.</p>
+      </form>
+      <form id="f-in" hidden autocomplete="on">
+        <label class="f">E-mail<input name="email" type="email" required autocomplete="email"></label>
+        <label class="f">Senha<input name="password" type="password" required autocomplete="current-password"></label>
+        <button class="btn" type="submit">Entrar</button>
+        <button class="linkbtn" type="button" id="b-forgot">Esqueci a senha</button>
+      </form>
+      <div class="status" id="a-st" role="status"></div>
+      <p class="hint" id="a-mode"></p>
+    </section>
+  </div>
+</main>
+
+<!-- ========== QUIZ ========== -->
+<main id="v-quiz" hidden>
+  <div class="quiz">
+    <div class="row"><span class="brand"><i></i>Perfil Olfativo</span><span class="spacer"></span><span class="when mono" id="q-count"></span></div>
+    <div class="progress" aria-hidden="true"><i id="q-bar" style="width:0"></i></div>
+    <div>
+      <div class="eyebrow" id="q-eyebrow"></div>
+      <h1 class="qtitle" id="q-title"></h1>
+      <p class="lede" id="q-sub"></p>
+    </div>
+    <div class="opts" id="q-opts" role="group"></div>
+    <div class="quiz-nav">
+      <button class="btn ghost" type="button" id="q-back">Voltar</button>
+      <button class="btn" type="button" id="q-next" disabled>Próxima</button>
+    </div>
+  </div>
+</main>
+
+<!-- ========== APP ========== -->
+<div id="v-app" hidden>
+  <div class="tabbar"><div class="tabs" role="tablist" aria-label="Seções">
+    <span class="brand"><i></i><span id="brand-name">Perfil Olfativo</span></span>
+    <button role="tab" data-tab="hoje" aria-controls="p-hoje">Para você</button>
+    <button role="tab" data-tab="loja" aria-controls="p-loja">Loja</button>
+    <button role="tab" data-tab="fav" aria-controls="p-fav">Favoritos</button>
+    <button role="tab" data-tab="perfil" aria-controls="p-perfil">Meu perfil</button>
+    <button role="tab" data-tab="carrinho" aria-controls="p-carrinho" class="cartbtn">Carrinho<span class="badge" id="cart-n" hidden>0</span></button>
+    <button role="tab" data-tab="admin" aria-controls="p-admin" id="tab-admin" hidden>Admin</button>
+  </div></div>
+
+  <!-- Para você -->
+  <div class="wrap" id="p-hoje" role="tabpanel" hidden>
+    <header class="top">
+      <div><div class="eyebrow" id="r-eyebrow">Perfume do dia</div><h1 id="r-title">Qual perfume usar?</h1></div>
+      <div class="wx" id="r-wx"></div>
+    </header>
+    <div class="dstrip" id="r-days" role="group" aria-label="Escolha o dia"></div>
+    <div class="seg" id="r-occ" role="group" aria-label="Escolha a ocasião"></div>
+    <div class="seg" id="r-per" role="group" aria-label="Escolha o período"></div>
+    <div class="occ">
+      <section class="card" id="r-feat"><div class="empty">Carregando…</div></section>
+      <section class="card">
+        <div class="card-head"><h2>Ranking para você</h2><span class="when" id="r-rank-sub"></span></div>
+        <div class="rank" id="r-rank"></div>
+      </section>
+    </div>
+    <section class="fc">
+      <div class="card-head"><h2>Semana</h2><span class="when">melhor perfume por dia e ocasião · toque para abrir</span></div>
+      <div class="mx" id="r-week"></div>
+    </section>
+    <footer class="foot"><p id="r-src"></p></footer>
+  </div>
+
+  <!-- Loja -->
+  <div class="wrap" id="p-loja" role="tabpanel" hidden>
+    <header>
+      <div class="eyebrow">Loja · <span id="s-count"></span></div>
+      <h1>Loja</h1>
+      <p class="lede">Os perfumes estão ordenados pela compatibilidade com o seu perfil olfativo. Toque num perfume para ver acordes, notas e quando usar.</p>
+    </header>
+    <div class="row"><input id="s-q" type="search" placeholder="Buscar por nome, marca ou nota" aria-label="Buscar" style="max-width:360px"><select id="s-sort" aria-label="Ordenar" style="max-width:220px"><option value="match">Mais compatíveis</option><option value="price-asc">Menor preço</option><option value="price-desc">Maior preço</option><option value="name">Nome</option></select></div>
+    <div class="filters" id="s-filt" role="group" aria-label="Filtrar"></div>
+    <div id="s-det" style="display:grid;gap:20px;scroll-margin-top:60px"></div>
+    <div class="tiles" id="s-tiles"></div>
+  </div>
+
+  <!-- Favoritos -->
+  <div class="wrap" id="p-fav" role="tabpanel" hidden>
+    <header><div class="eyebrow">Favoritos · <span id="f-count"></span></div><h1>Favoritos</h1><p class="lede">Perfumes que você marcou com ☆ na loja ou nas recomendações.</p></header>
+    <div class="tiles" id="f-tiles"></div>
+  </div>
+
+  <!-- Perfil -->
+  <div class="wrap" id="p-perfil" role="tabpanel" hidden>
+    <header class="row"><div><div class="eyebrow" id="u-eyebrow"></div><h1 id="u-title">Meu perfil olfativo</h1></div><span class="spacer"></span><button class="btn ghost" type="button" id="b-redo">Refazer o quiz</button><button class="btn ghost" type="button" id="b-out">Sair</button></header>
+    <div id="u-prof"></div>
+    <section class="card">
+      <div class="card-head"><h2>Meus dados</h2></div>
+      <form id="f-me" class="grid2">
+        <label class="f">Nome<input name="name"></label>
+        <label class="f">Cidade (para a previsão)<input name="city" placeholder="São Paulo"></label>
+        <div style="align-self:end"><button class="btn" type="submit">Salvar</button></div>
+      </form>
+      <div class="status" id="u-st" role="status"></div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Meus pedidos</h2></div>
+      <div class="orders" id="u-orders"></div>
+    </section>
+  </div>
+
+  <!-- Carrinho -->
+  <div class="wrap" id="p-carrinho" role="tabpanel" hidden>
+    <header><div class="eyebrow">Carrinho</div><h1>Seu carrinho</h1></header>
+    <div id="c-body"></div>
+  </div>
+
+  <!-- Admin -->
+  <div class="wrap" id="p-admin" role="tabpanel" hidden>
+    <header><div class="eyebrow">Acesso administrador</div><h1>Admin</h1><p class="lede">Visão geral do teste: cadastros, perfis traçados, pedidos, preços e estoque.</p></header>
+    <div class="kpis" id="ad-kpis"></div>
+    <div class="subtabs" id="ad-sub" role="group"></div>
+    <div id="ad-body" style="display:grid;gap:16px"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="js/config.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/backend.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
