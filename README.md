@@ -9,6 +9,7 @@ Site estático (GitHub Pages) onde o usuário se cadastra, responde 10 perguntas
 | `js/config.js` | **Configuração**: Supabase, modo de pagamento, convite do modo demo |
 | `js/questions.js` | **As 10 perguntas do quiz** (a 10ª é o perfume favorito, que vale 40% do perfil) |
 | `js/reference.js` | Base de referência (29 perfumes, sem preço): quiz, armário e de onde o Admin coloca à venda |
+| `js/store-seed.js` | Loja inicial: 11 perfumes do Shopping China com preço = custo + 45% |
 | `js/backend.js` | Dados: Supabase ou modo demo (navegador) |
 | `js/app.js` | Quiz → perfil, recomendações, loja, carrinho, admin |
 | `supabase/schema.sql` | Tabelas, segurança (RLS), convite, pedidos |
@@ -19,7 +20,7 @@ Com `SUPABASE_URL` vazio, tudo fica salvo no navegador. Cadastre-se com **guibru
 
 ## Ligar o Supabase (usuários reais)
 1. Crie um projeto em supabase.com.
-2. SQL Editor → rode `supabase/schema.sql`. A loja começa vazia.
+2. SQL Editor → rode `supabase/schema.sql` e depois `supabase/seed.sql` (loja inicial).
 3. Authentication → URL Configuration → *Site URL* = endereço do GitHub Pages.
    (Para testar mais rápido: Authentication → Providers → Email → desligue *Confirm email*.)
 4. Project Settings → API → copie *Project URL* e *anon public key* para `js/config.js`.
