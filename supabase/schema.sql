@@ -1,7 +1,7 @@
 -- =====================================================================
 -- Perfil Olfativo · schema do Supabase
 -- Rode este arquivo inteiro no SQL Editor do Supabase (uma vez).
--- Depois rode seed.sql para carregar o catálogo.
+-- A loja começa vazia: coloque perfumes à venda pela aba Admin.
 -- =====================================================================
 
 -- ---------- configurações do site (linha única) ----------
@@ -28,8 +28,16 @@ create table if not exists public.profiles (
   quiz_answers      jsonb,
   olfactive_profile jsonb,
   quiz_done_at      timestamptz,
+  avatar            text,                                 -- foto (data URL 256px)
+  addresses         jsonb not null default '[]'::jsonb,   -- endereços salvos (casa, praia, família…)
+  active_address    text,                                 -- id do endereço usado para o clima
+  wardrobe          jsonb not null default '[]'::jsonb,   -- armário: perfumes que a pessoa tem
   created_at        timestamptz not null default now()
 );
+alter table public.profiles add column if not exists avatar text;
+alter table public.profiles add column if not exists addresses jsonb not null default '[]'::jsonb;
+alter table public.profiles add column if not exists active_address text;
+alter table public.profiles add column if not exists wardrobe jsonb not null default '[]'::jsonb;
 
 -- ---------- catálogo ----------
 create table if not exists public.products (
@@ -37,11 +45,20 @@ create table if not exists public.products (
   name       text not null,
   house      text,
   price      numeric(10,2) not null default 0 check (price >= 0),
-  stock      int not null default 0 check (stock >= 0),
+  stock      int not null default 99 check (stock >= 0),
   volume     text,
   active     boolean not null default true,
   data       jsonb not null default '{}'::jsonb,   -- acordes, notas, estações, ocasiões, performance…
   updated_at timestamptz not null default now()
+);
+
+-- ---------- fornecedor de cada produto (dropshipping) — só o admin enxerga ----------
+create table if not exists public.product_suppliers (
+  product_id    text primary key references public.products on delete cascade,
+  supplier_name text,
+  supplier_url  text,
+  cost          numeric(10,2) check (cost >= 0),
+  updated_at    timestamptz not null default now()
 );
 
 -- ---------- favoritos ----------
@@ -57,7 +74,7 @@ create table if not exists public.orders (
   id               uuid primary key default gen_random_uuid(),
   user_id          uuid references auth.users on delete set null,
   status           text not null default 'aguardando_pagamento'
-                   check (status in ('aguardando_pagamento','pago','enviado','entregue','cancelado')),
+                   check (status in ('aguardando_pagamento','pago','comprado_fornecedor','enviado','entregue','cancelado')),
   items            jsonb not null,
   subtotal         numeric(10,2) not null,
   shipping         numeric(10,2) not null,
@@ -65,9 +82,14 @@ create table if not exists public.orders (
   shipping_address jsonb,
   payment_provider text default 'simulado',
   payment_id       text,
+  tracking         text,
   created_at       timestamptz not null default now(),
   updated_at       timestamptz not null default now()
 );
+
+alter table public.orders add column if not exists tracking text;
+alter table public.orders drop constraint if exists orders_status_check;
+alter table public.orders add constraint orders_status_check check (status in ('aguardando_pagamento','pago','comprado_fornecedor','enviado','entregue','cancelado'));
 
 -- ---------- helpers ----------
 create or replace function public.is_admin() returns boolean
@@ -162,6 +184,10 @@ alter table public.profiles     enable row level security;
 alter table public.products     enable row level security;
 alter table public.favorites    enable row level security;
 alter table public.orders       enable row level security;
+alter table public.product_suppliers enable row level security;
+
+drop policy if exists suppliers_admin on public.product_suppliers;
+create policy suppliers_admin on public.product_suppliers for all using (public.is_admin()) with check (public.is_admin());
 
 drop policy if exists settings_admin on public.app_settings;
 create policy settings_admin on public.app_settings for all using (public.is_admin()) with check (public.is_admin());
@@ -172,7 +198,7 @@ drop policy if exists profiles_update on public.profiles;
 create policy profiles_update on public.profiles for update using (id = auth.uid() or public.is_admin());
 -- o usuário não consegue mudar o próprio "role"
 revoke update on public.profiles from authenticated;
-grant update (name, city, lat, lon, quiz_answers, olfactive_profile, quiz_done_at) on public.profiles to authenticated;
+grant update (name, city, lat, lon, quiz_answers, olfactive_profile, quiz_done_at, avatar, addresses, active_address, wardrobe) on public.profiles to authenticated;
 
 drop policy if exists products_read on public.products;
 create policy products_read on public.products for select using (active or public.is_admin());

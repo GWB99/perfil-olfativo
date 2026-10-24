@@ -328,3 +328,56 @@ label.f{display:grid;gap:5px;font-size:13px;font-weight:600;color:var(--muted)}
 .subtabs button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .switch{display:flex;gap:10px;align-items:center;font-size:14px}
 .switch input{width:18px;height:18px}
+
+/* ================= v2: perfil, armário, endereços ================= */
+h3{font-size:18px;font-weight:700}
+.phead{grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:20px}
+@media (max-width:720px){.phead{grid-template-columns:auto minmax(0,1fr)}.phead>.row{grid-column:1/-1;justify-content:flex-start!important}}
+.avwrap{position:relative;cursor:pointer;display:inline-block;border-radius:50%}
+.avwrap:focus-within{outline:2px solid var(--accent);outline-offset:3px}
+.avatar{display:block;border-radius:50%;object-fit:cover;border:3px solid var(--surface);box-shadow:0 0 0 2px var(--accent)}
+.avatar.ph{display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--warm));color:#fff;font-family:var(--display);font-weight:700}
+.avedit{position:absolute;inset:auto 0 -4px 0;margin:auto;width:max-content;font:600 11px var(--body);background:var(--fg);color:var(--bg);padding:3px 8px;border-radius:999px;opacity:0;transition:opacity .15s}
+.avwrap:hover .avedit,.avwrap:focus-within .avedit{opacity:1}
+@media (hover:none){.avedit{opacity:.9}}
+.chipbtn{font:600 13px var(--body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
+.chipbtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.chipbtn:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.wxday{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:520px){.wxday{grid-template-columns:1fr}}
+.wxbig{display:grid}
+.wxbig span{font:700 56px/1 var(--display)}
+.wxbig small{color:var(--muted);font-size:13px;margin-top:4px}
+.wxper{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wxper div{background:var(--sunk);border-radius:10px;padding:10px;display:grid;gap:2px;text-align:center}
+.wxper b{font-size:20px}
+.top3{display:grid;gap:10px}
+.t3{display:grid;grid-template-columns:22px 44px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px}
+.t3 svg{width:44px;height:58px}
+.t3 .tn{font-family:var(--display);font-weight:700;font-size:16px;text-decoration:none;color:var(--fg)}
+.t3 .th{font-size:12.5px;color:var(--muted)}
+.score.sm{width:48px;height:48px;font-size:17px}
+.wardrobe{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:10px}
+.wcard{position:relative;display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:start;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface)}
+.wcard svg{width:44px;height:58px}
+.wcard .tn{font-family:var(--display);font-weight:700;font-size:15px;padding-right:18px}
+.wcard .th{font-size:12.5px;color:var(--muted)}
+.wcard .x{all:unset;cursor:pointer;position:absolute;top:6px;right:8px;width:22px;height:22px;display:grid;place-items:center;border-radius:50%;color:var(--muted)}
+.wcard .x:hover{background:var(--sunk)}
+.results{display:grid;gap:4px;margin-top:6px}
+.resbtn{all:unset;box-sizing:border-box;cursor:pointer;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14px}
+.resbtn small{font-weight:400;color:var(--muted)}
+.resbtn:hover,.resbtn:focus-visible{border-color:var(--accent);background:var(--accent-soft)}
+.pcard{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;border:1.5px solid var(--accent);border-radius:14px;padding:12px;background:var(--accent-soft);margin-top:6px}
+.pcard svg{width:48px;height:64px}
+.pcard .tn{font-family:var(--display);font-weight:700;font-size:17px}
+.pcard .th{font-size:13px;color:var(--muted)}
+.addrs{display:grid;gap:8px}
+.addr{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.addr.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent-soft) 60%,transparent)}
+.addr.pick{cursor:pointer;justify-content:flex-start;flex-wrap:nowrap}
+.addr.pick input{width:18px;height:18px;flex:none}
+.addr.off{opacity:.6;cursor:not-allowed}
+.addrform{display:grid;gap:10px;border-top:1px dashed var(--line);padding-top:14px}
+.aorder{gap:12px}
+.aorder form select{width:auto;max-width:220px}

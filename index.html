@@ -36,10 +36,10 @@
         <label class="f">Nome<input name="name" required autocomplete="name" placeholder="Como você quer ser chamado"></label>
         <label class="f">E-mail<input name="email" type="email" required autocomplete="email" placeholder="voce@email.com"></label>
         <label class="f">Senha<input name="password" type="password" required minlength="6" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></label>
-        <label class="f">Cidade<input name="city" autocomplete="address-level2" placeholder="São Paulo"></label>
+        <label class="f">Cidade onde você mora<input name="city" autocomplete="address-level2" placeholder="São Paulo"></label>
         <label class="f" id="invite-wrap">Código de convite<input name="invite" autocomplete="off" placeholder="Recebido por quem te convidou"></label>
         <button class="btn" type="submit">Criar conta e começar</button>
-        <p class="hint">A cidade é usada só para a previsão do tempo nas recomendações.</p>
+        <p class="hint">A cidade é usada para a previsão do tempo nas recomendações. Depois você pode salvar outros endereços no seu perfil.</p>
       </form>
       <form id="f-in" hidden autocomplete="on">
         <label class="f">E-mail<input name="email" type="email" required autocomplete="email"></label>
@@ -92,6 +92,7 @@
     <div class="dstrip" id="r-days" role="group" aria-label="Escolha o dia"></div>
     <div class="seg" id="r-occ" role="group" aria-label="Escolha a ocasião"></div>
     <div class="seg" id="r-per" role="group" aria-label="Escolha o período"></div>
+    <div id="r-note"></div>
     <div class="occ">
       <section class="card" id="r-feat"><div class="empty">Carregando…</div></section>
       <section class="card">
@@ -126,23 +127,7 @@
   </div>
 
   <!-- Perfil -->
-  <div class="wrap" id="p-perfil" role="tabpanel" hidden>
-    <header class="row"><div><div class="eyebrow" id="u-eyebrow"></div><h1 id="u-title">Meu perfil olfativo</h1></div><span class="spacer"></span><button class="btn ghost" type="button" id="b-redo">Refazer o quiz</button><button class="btn ghost" type="button" id="b-out">Sair</button></header>
-    <div id="u-prof"></div>
-    <section class="card">
-      <div class="card-head"><h2>Meus dados</h2></div>
-      <form id="f-me" class="grid2">
-        <label class="f">Nome<input name="name"></label>
-        <label class="f">Cidade (para a previsão)<input name="city" placeholder="São Paulo"></label>
-        <div style="align-self:end"><button class="btn" type="submit">Salvar</button></div>
-      </form>
-      <div class="status" id="u-st" role="status"></div>
-    </section>
-    <section class="card">
-      <div class="card-head"><h2>Meus pedidos</h2></div>
-      <div class="orders" id="u-orders"></div>
-    </section>
-  </div>
+  <div class="wrap" id="p-perfil" role="tabpanel" hidden><div id="u-body" style="display:grid;gap:20px"></div></div>
 
   <!-- Carrinho -->
   <div class="wrap" id="p-carrinho" role="tabpanel" hidden>
@@ -162,7 +147,7 @@
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script src="js/config.js"></script>
-<script src="js/catalog.js"></script>
+<script src="js/reference.js"></script>
 <script src="js/questions.js"></script>
 <script src="js/backend.js"></script>
 <script src="js/app.js"></script>
